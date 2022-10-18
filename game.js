@@ -1,21 +1,24 @@
-import {SNAKE_SPEED, update as updateSnake, draw as drawSnake, getSnakeHead, snakeIntersection} from "./snake.js"
-import {update as updateFood, draw as drawFood} from "./food.js"
-import {outsideGrid} from "./grid.js"
+import { Snake} from "./lib/Snake.js"
+import { Food } from "./lib/Food.js";
+import { GameWindow } from "./lib/Grid.js"
+import { Input } from "./lib/Input.js";
 
 let lastRenderTime = 0;
 let gameOver = false;
 const gameBoard = document.getElementById("game-board");
 
+Input.listen();
+
 const update = () => {
-    updateSnake();
-    updateFood();
+    Snake.update();
+    Food.update();
     checkDeath();
 }
 
 const draw = () => {
     gameBoard.innerHTML = '';
-    drawSnake(gameBoard);
-    drawFood(gameBoard);
+    Snake.draw(gameBoard);
+    Food.draw(gameBoard);
 }
 
 const main = (currentTime) => {
@@ -28,7 +31,7 @@ const main = (currentTime) => {
 
     window.requestAnimationFrame(main);
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000;
-    if (secondsSinceLastRender < 1 / SNAKE_SPEED) return;
+    if (secondsSinceLastRender < 1 / Snake.speed) return;
 
     lastRenderTime = currentTime;
     
@@ -36,9 +39,6 @@ const main = (currentTime) => {
     draw();
 }
 
-const checkDeath = () => {
-    gameOver = outsideGrid(getSnakeHead()) || snakeIntersection();
-}
-
+const checkDeath = () => gameOver = GameWindow.outside(Snake.getHead()) || Snake.intersectedSelf();
 
 window.requestAnimationFrame(main)
