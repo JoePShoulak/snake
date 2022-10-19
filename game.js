@@ -23,7 +23,7 @@ const draw = () => {
 
 const main = (currentTime) => {
     if (gameOver) {
-        if (confirm("Play again?")) {
+        if (confirm("Play again?")) { 
             window.location = './';
         }
         return;
